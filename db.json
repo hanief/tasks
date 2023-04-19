@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    { "id": 1, "title": "Learn VueJS" },
+    { "id": 2, "title": "Learn Nuxt" },
+    { "id": 3, "title": "Learn JSON Server" },
+    { "id": 4, "title": "Learn Pinia" },
+    { "id": 5, "title": "Learn Vitest" },
+    { "id": 6, "title": "Learn Playwright" }
+  ]
+}
