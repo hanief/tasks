@@ -3,12 +3,12 @@
     {
       "id": 1,
       "text": "Learn VueJS",
-      "isCompleted": true
+      "isCompleted": false
     },
     {
       "id": 2,
       "text": "Learn Nuxt",
-      "isCompleted": false
+      "isCompleted": true
     },
     {
       "id": 3,
