@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# Tasks
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a simple tasks CRUD app.
 
 ## Setup
 
@@ -25,6 +25,12 @@ Start the development server on `http://localhost:3000`
 npm run dev
 ```
 
+Start the mock server on `http://localhost:3001`
+
+```bash
+npm run mock
+```
+
 ## Production
 
 Build the application for production:
@@ -39,4 +45,3 @@ Locally preview production build:
 npm run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
