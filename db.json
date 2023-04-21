@@ -1,10 +1,34 @@
 {
   "tasks": [
-    { "id": 1, "title": "Learn VueJS" },
-    { "id": 2, "title": "Learn Nuxt" },
-    { "id": 3, "title": "Learn JSON Server" },
-    { "id": 4, "title": "Learn Pinia" },
-    { "id": 5, "title": "Learn Vitest" },
-    { "id": 6, "title": "Learn Playwright" }
+    {
+      "id": 1,
+      "text": "Learn VueJS",
+      "isCompleted": true
+    },
+    {
+      "id": 2,
+      "text": "Learn Nuxt",
+      "isCompleted": false
+    },
+    {
+      "id": 3,
+      "text": "Learn JSON Server",
+      "isCompleted": true
+    },
+    {
+      "id": 4,
+      "text": "Learn Pinia",
+      "isCompleted": true
+    },
+    {
+      "id": 5,
+      "text": "Learn Vitest",
+      "isCompleted": true
+    },
+    {
+      "id": 6,
+      "text": "Learn Playwright",
+      "isCompleted": false
+    }
   ]
 }
