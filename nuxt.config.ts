@@ -1,9 +1,14 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: [
-    '~/assets/styles/main.css',
-  ],
+  runtimeConfig: {
+    public: {
+      backend: {
+        baseURL: "http://localhost:3001",
+      },
+    },
+  },
+  css: ["~/assets/styles/main.css"],
   modules: [
-    '@pinia/nuxt',
+    "@pinia/nuxt",
+    "nuxt-vitest"
   ],
-})
+});
