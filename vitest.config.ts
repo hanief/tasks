@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { defineConfig } from "vitest/config";
 import Vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite"
@@ -8,7 +7,8 @@ export default defineConfig({
     Vue(),
     AutoImport({
       imports: [
-        "vue"
+        "vue",
+        "pinia"
       ],
       dirs: [
         "./utils",
@@ -19,7 +19,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    include: ["tests/{unit,component}/**/*.spec.{ts,tsx}"],
+    include: ["tests/{unit,component}/**/*.{spec,test}.{ts,tsx}"],
     setupFiles: ["./setupTest.js"],
     root: ".",
     alias: {

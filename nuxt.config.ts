@@ -11,4 +11,10 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-vitest"
   ],
+  pinia: {
+    autoImports: [
+      'defineStore',
+      ['defineStore', 'definePiniaStore'],
+    ],
+  },
 });
