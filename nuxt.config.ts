@@ -1,9 +1,7 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      backend: {
-        baseURL: "http://localhost:3001",
-      },
+      backend: "http://localhost:3001",
     },
   },
   css: ["~/assets/styles/main.css"],

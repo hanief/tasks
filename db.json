@@ -3,32 +3,32 @@
     {
       "id": 1,
       "text": "Learn VueJS",
-      "isCompleted": false
+      "isDone": true
     },
     {
       "id": 2,
       "text": "Learn Nuxt",
-      "isCompleted": true
+      "isDone": false
     },
     {
       "id": 3,
       "text": "Learn JSON Server",
-      "isCompleted": true
+      "isDone": true
     },
     {
       "id": 4,
       "text": "Learn Pinia",
-      "isCompleted": true
+      "isDone": true
     },
     {
       "id": 5,
       "text": "Learn Vitest",
-      "isCompleted": true
+      "isDone": true
     },
     {
       "id": 6,
       "text": "Learn Playwright",
-      "isCompleted": false
+      "isDone": false
     }
   ]
 }

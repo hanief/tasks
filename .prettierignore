@@ -1,0 +1,14 @@
+node_modules
+*.log*
+.nuxt
+.nitro
+.cache
+.output
+.env
+dist
+.DS_Store
+.idea
+/test-results/
+/playwright-report/
+/playwright/.cache/
+.env
