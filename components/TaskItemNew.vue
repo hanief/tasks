@@ -43,6 +43,7 @@ input {
 }
 
 input:focus {
+  outline: none !important;
   border: 0;
 }
 </style>

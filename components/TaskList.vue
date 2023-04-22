@@ -2,7 +2,7 @@
   <ul>
     <TransitionGroup name="list">
       <TaskItem v-for="task in displayedTasks" :task="task" :key="task.id"
-        @remove="removeTask" @toggle="toggleTask">
+        @remove="removeTask" @toggle="toggleTask" @update="handleUpdate">
       </TaskItem>
     </TransitionGroup>
     <TaskItemNew @add="addTask" />
@@ -27,6 +27,10 @@ const displayedTasks = computed(() => {
   return filteredTasks.sort((a, b) => Number(a.isDone) - Number(b.isDone));
 });
 const toggleCompleted = () => showCompleted.value = !showCompleted.value;
+
+function handleUpdate(payload: any) {
+  console.log(payload)
+}
 
 onMounted(async () => {
   const { tasks: newTasks } = await fetchTasks();
