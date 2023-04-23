@@ -2,13 +2,17 @@
   <ul>
     <TransitionGroup name="list">
       <TaskItem v-for="task in displayedTasks" :task="task" :key="task.id"
-        @remove="removeTask" @toggle="toggleTask" @update="handleUpdate">
+        :showActions="showActions" @remove="removeTask" @toggle="toggleTask"
+        @update="handleUpdate">
       </TaskItem>
     </TransitionGroup>
-    <TaskItemNew @add="addTask" />
+    <TaskItemNew @add="handleAdd" />
   </ul>
-  <a @click="toggleCompleted">{{ showCompleted ? 'Hide' : 'Show' }}
-    Completed</a>
+  <div class="toolbar">
+    <a @click="toggleCompleted">{{ showCompleted ? 'Hide' : 'Show' }}
+      Completed</a>
+    <a @click="toggleActions">Edit</a>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -18,8 +22,8 @@ import { useTasksStore } from "~/stores/tasks";
 const store = useTasksStore();
 const { tasks } = storeToRefs(store);
 const { toggleTask, removeTask, addTask, setTasks } = store;
-const { fetchTasks } = useBackend();
-const showCompleted = useState(() => false);
+const showCompleted = ref(false);
+const showActions = ref(false);
 
 const displayedTasks = computed(() => {
   const filteredTasks = showCompleted.value ? tasks.value : tasks.value.filter(t => !t.isDone)
@@ -27,9 +31,14 @@ const displayedTasks = computed(() => {
   return filteredTasks.sort((a, b) => Number(a.isDone) - Number(b.isDone));
 });
 const toggleCompleted = () => showCompleted.value = !showCompleted.value;
+const toggleActions = () => showActions.value = !showActions.value;
 
 function handleUpdate(payload: any) {
   console.log(payload)
+}
+
+async function handleAdd(payload: any) {
+  await addTask(payload)
 }
 
 onMounted(async () => {
@@ -39,11 +48,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-div {
-  margin: 0;
-  background-color: brown;
-}
-
 ul {
   display: flex;
   flex-direction: column;
@@ -56,9 +60,16 @@ ul {
 }
 
 a {
-  margin-top: 1rem;
+  margin: 1rem 1rem;
   text-decoration: none;
   cursor: pointer;
+}
+
+div.toolbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .list-move,

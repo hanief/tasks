@@ -2,32 +2,37 @@
   "tasks": [
     {
       "id": 1,
-      "text": "Learn VueJS",
+      "text": "Buy Groceries",
       "isDone": true
     },
     {
       "id": 2,
-      "text": "Learn Nuxt",
+      "text": "Write a blog post",
       "isDone": false
     },
     {
       "id": 3,
-      "text": "Learn JSON Server",
+      "text": "Record a video",
       "isDone": true
     },
     {
       "id": 4,
-      "text": "Learn Pinia",
+      "text": "Go to the gym",
       "isDone": true
     },
     {
       "id": 5,
-      "text": "Learn Vitest",
+      "text": "Run a marathon",
       "isDone": true
     },
     {
       "id": 6,
-      "text": "Learn Playwright",
+      "text": "Eat a burger",
+      "isDone": false
+    },
+    {
+      "id": 7,
+      "text": "Drink a coffee",
       "isDone": false
     }
   ]

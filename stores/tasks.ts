@@ -1,3 +1,6 @@
+import { Task } from "~/types";
+import { createTask } from "~/composables/useBackend";
+
 export const useTasksStore = defineStore("tasks", () => {
   const tasks = ref<Task[]>([]);
 
@@ -5,12 +8,36 @@ export const useTasksStore = defineStore("tasks", () => {
     tasks.value = newTasks;
   }
 
-  function addTask(text: string) {
-    tasks.value.push({
-      id: generateRandomInteger(),
+  function addLocalTask(text: string): Task {
+    const localId = generateRandomInteger()
+    const task: Task = {
+      id: localId,
+      localId: localId,
       text,
       isDone: false,
-    });
+    }
+    tasks.value.push(task);
+
+    return task
+  }
+
+  async function addTask(text: string): Promise<Task> {
+    const localTask = addLocalTask(text)
+    const { task: remoteTask } = await createTask(text);
+
+    return updateWithRemoteTask(localTask, remoteTask);
+  }
+
+  function updateWithRemoteTask(localTask: Task, remoteTask: Task): Task {
+    tasks.value = tasks.value.map(task => {
+      if (task.localId === localTask.localId) {
+        return { ...remoteTask, localId: task.localId }
+      }
+
+      return task
+    })
+
+    return remoteTask
   }
 
   function toggleTask(id: number) {
@@ -37,5 +64,5 @@ export const useTasksStore = defineStore("tasks", () => {
     tasks.value = tasks.value.filter(task => task.id !== id);
   }
 
-  return { tasks, setTasks, addTask, removeTask, toggleTask, changeTaskText };
+  return { tasks, setTasks, addTask, updateWithRemoteTask, removeTask, toggleTask, changeTaskText };
 });

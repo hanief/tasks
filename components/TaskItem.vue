@@ -1,16 +1,19 @@
 <template>
   <li :class="{ editing: isEditing }">
-    <input v-model="task.text" @focus="editingOn" @blur="editingOff" />
-    <img class="success" v-show="task.isDone" src="~/assets/icons/check.svg"
-      width="18" height="18" @click="emit('toggle', task.id)" />
-    <img v-show="!task.isDone" src="~/assets/icons/circle.svg" width="18"
+    <input aria-label="task-item-input" v-model="task.text" @focus="handleFocus"
+      @blur="handleBlur" />
+    <img :class="{ success: task.isDone }" v-show="!showActions"
+      :src="task.isDone ? checkIcon : circleIcon" alt="toggle complete" width="18"
       height="18" @click="emit('toggle', task.id)" />
   </li>
 </template>
 
 <script setup lang="ts">
-
+import { Task } from "~/types"
+import checkIcon from '~/assets/icons/check.svg'
+import circleIcon from '~/assets/icons/circle.svg'
 const { task } = defineProps<{
+  showActions: boolean;
   task: Task;
 }>();
 const emit = defineEmits<{
@@ -20,11 +23,11 @@ const emit = defineEmits<{
 }>();
 const isEditing = ref(false);
 
-function editingOn() {
+function handleFocus() {
   isEditing.value = true;
 }
 
-function editingOff() {
+function handleBlur() {
   isEditing.value = false;
 }
 
@@ -48,7 +51,7 @@ li {
 }
 
 li.editing {
-  border: 0.75px solid var(--color-link);
+  border: 0.75px solid var(--color-primary);
 }
 
 li>span {

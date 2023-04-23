@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "text": "Buy Groceries",
+      "isDone": true
+    },
+    {
+      "id": 2,
+      "text": "Write a blog post",
+      "isDone": false
+    },
+    {
+      "id": 3,
+      "text": "Record a video",
+      "isDone": true
+    },
+    {
+      "id": 4,
+      "text": "Go to the gym",
+      "isDone": true
+    },
+    {
+      "id": 5,
+      "text": "Run a marathon",
+      "isDone": true
+    },
+    {
+      "id": 6,
+      "text": "Eat a burger",
+      "isDone": false
+    },
+    {
+      "id": 7,
+      "text": "Drink a coffee",
+      "isDone": false
+    }
+  ]
+}

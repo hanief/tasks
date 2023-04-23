@@ -19,11 +19,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    include: ["tests/{unit,component}/**/*.{spec,test}.{ts,tsx}"],
+    include: ["tests/{unit,component}/*.unit.test.{ts,tsx}"],
     setupFiles: ["./setupTest.js"],
     root: ".",
     alias: {
-      "~": "/",
+      "~": '.',
     },
   },
 });

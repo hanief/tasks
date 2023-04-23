@@ -1,6 +1,6 @@
 import { rest } from 'msw'
-import db from 'db.json'
-const baseURL = process.env.NUXT_BACKEND_BASE_URL || 'http://localhost:3001'
+import db from '~/mocks/test.json'
+const baseURL = 'http://localhost:3001'
 
 export const handlers = [
   rest.get(`${baseURL}/tasks`, (req, res, ctx) => {

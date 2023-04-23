@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-const newTaskText = useState(() => "");
+const newTaskText = ref("");
 const emit = defineEmits<{
   (event: "add", text: string): void;
 }>();
@@ -28,11 +28,6 @@ li {
   text-decoration: none;
   border: 0.5px solid var(--color-bg-secondary);
   padding: 0.5rem 1rem;
-}
-
-li>a {
-  text-decoration: none;
-  cursor: pointer;
 }
 
 input {

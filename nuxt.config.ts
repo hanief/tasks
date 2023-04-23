@@ -1,4 +1,12 @@
 export default defineNuxtConfig({
+  app: {
+    head: {
+      title: "Tasks",
+      meta: [
+        { name: 'description', content: 'Write it, do it' }
+      ]
+    }
+  },
   runtimeConfig: {
     public: {
       backend: "http://localhost:3001",
@@ -14,5 +22,5 @@ export default defineNuxtConfig({
       'defineStore',
       ['defineStore', 'definePiniaStore'],
     ],
-  },
+  }
 });

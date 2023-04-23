@@ -34,7 +34,7 @@ describe("Tasks Store", () => {
     expect(store.tasks).toEqual(newTasks);
   })
 
-  test("should add new task", () => {
+  test("should be able to add new task", () => {
     const store = useTasksStore()
     expect(store.tasks).toHaveLength(0)
 
@@ -46,7 +46,7 @@ describe("Tasks Store", () => {
     expect(store.tasks[0].isDone).toEqual(false)
   })
 
-  test("should toggle task", () => {
+  test("should be able to toggle task done", () => {
     const store = useTasksStore()
     store.addTask("Task 1")
     expect(store.tasks).toHaveLength(1)
