@@ -4,7 +4,10 @@ export async function fetchTasks() {
   const { data } = await useMyFetch<Task[]>("/tasks");
 
   return {
-    tasks: data.value || [],
+    tasks: data.value ? data.value.map(task => {
+      task.localId = task.id;
+      return task;
+    }) : [],
   }
 }
 

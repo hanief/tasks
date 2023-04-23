@@ -3,37 +3,26 @@
     {
       "id": 1,
       "text": "Buy Groceries",
-      "isDone": true
-    },
-    {
-      "id": 2,
-      "text": "Write a blog post",
-      "isDone": false
+      "isDone": false,
+      "localId": 1
     },
     {
       "id": 3,
       "text": "Record a video",
-      "isDone": true
-    },
-    {
-      "id": 4,
-      "text": "Go to the gym",
-      "isDone": true
-    },
-    {
-      "id": 5,
-      "text": "Run a marathon",
-      "isDone": true
+      "isDone": true,
+      "localId": 3
     },
     {
       "id": 6,
       "text": "Eat a burger",
-      "isDone": false
+      "isDone": true,
+      "localId": 6
     },
     {
       "id": 7,
-      "text": "Drink a coffee",
-      "isDone": false
+      "text": "sada",
+      "isDone": false,
+      "localId": 7
     }
   ]
 }

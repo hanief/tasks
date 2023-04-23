@@ -1,11 +1,11 @@
-import { Task } from "~/types";
-import { createTask } from "~/composables/useBackend";
+import { Task } from "~/types"
+import { createTask, deleteTask, updateTask } from "~/composables/useBackend"
 
 export const useTasksStore = defineStore("tasks", () => {
-  const tasks = ref<Task[]>([]);
+  const tasks = ref<Task[]>([])
 
   function setTasks(newTasks: Task[]) {
-    tasks.value = newTasks;
+    tasks.value = newTasks
   }
 
   function addLocalTask(text: string): Task {
@@ -16,16 +16,16 @@ export const useTasksStore = defineStore("tasks", () => {
       text,
       isDone: false,
     }
-    tasks.value.push(task);
+    tasks.value.push(task)
 
     return task
   }
 
   async function addTask(text: string): Promise<Task> {
     const localTask = addLocalTask(text)
-    const { task: remoteTask } = await createTask(text);
+    const { task: remoteTask } = await createTask(text)
 
-    return updateWithRemoteTask(localTask, remoteTask);
+    return updateWithRemoteTask(localTask, remoteTask)
   }
 
   function updateWithRemoteTask(localTask: Task, remoteTask: Task): Task {
@@ -40,29 +40,29 @@ export const useTasksStore = defineStore("tasks", () => {
     return remoteTask
   }
 
-  function toggleTask(id: number) {
-    const task = tasks.value.find(task => task.id === id);
-    if (task) {
-      task.isDone = !task.isDone;
-      updateTask(task);
-    }
+  function toggleTask(task: Task) {
+    task.isDone = !task.isDone
+    updateLocalTask(task)
+    updateTask(task)
   }
 
-  function changeTaskText(id: number, text: string) {
-    const task = tasks.value.find((task) => task.id === id);
-    if (task) {
-      task.text = text;
-      updateTask(task);
-    }
+  function changeTaskText(task: Task) {
+    updateLocalTask(task)
+    updateTask(task)
   }
 
-  function updateTask(task: Task) {
+  function updateLocalTask(task: Task) {
     tasks.value = tasks.value.map(t => t.id === task.id ? task : t)
   }
 
-  function removeTask(id: number) {
-    tasks.value = tasks.value.filter(task => task.id !== id);
+  async function removeTask(task: Task) {
+    removeLocalTask(task)
+    await deleteTask(task)
   }
 
-  return { tasks, setTasks, addTask, updateWithRemoteTask, removeTask, toggleTask, changeTaskText };
-});
+  function removeLocalTask(task: Task) {
+    tasks.value = tasks.value.filter(t => t.localId !== task.localId)
+  }
+
+  return { tasks, setTasks, addTask, updateWithRemoteTask, removeTask, toggleTask, changeTaskText }
+})

@@ -30,7 +30,7 @@ test.describe('Home', () => {
     const texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
     await expect(texts).toEqual(uncompleteTasks.map(task => task.text));
 
-    const toggleCompleteButtonList = page.getByRole('listitem').getByRole('img')
+    const toggleCompleteButtonList = page.getByRole('listitem').getByRole('button')
     await expect(toggleCompleteButtonList).toHaveCount(uncompleteTasks.length);
   })
 

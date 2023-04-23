@@ -1,17 +1,19 @@
 <template>
   <ul>
     <TransitionGroup name="list">
-      <TaskItem v-for="task in displayedTasks" :task="task" :key="task.id"
+      <TaskItem v-for="task in displayedTasks" :task="task" :key="task.localId"
         :showActions="showActions" @remove="removeTask" @toggle="toggleTask"
-        @update="handleUpdate">
+        @update="changeTaskText">
       </TaskItem>
     </TransitionGroup>
-    <TaskItemNew @add="handleAdd" />
+    <TaskItemNew @add="addTask" />
   </ul>
   <div class="toolbar">
-    <a @click="toggleCompleted">{{ showCompleted ? 'Hide' : 'Show' }}
+    <a role="button" aria-label="toggle-completed-button"
+      @click="toggleCompleted">{{ showCompleted ? 'Hide' : 'Show' }}
       Completed</a>
-    <a @click="toggleActions">Edit</a>
+    <a role="button" aria-label="edit-button" @click="toggleActions">{{
+      showActions ? 'Done' : 'Edit' }}</a>
   </div>
 </template>
 
@@ -21,7 +23,7 @@ import { useTasksStore } from "~/stores/tasks";
 
 const store = useTasksStore();
 const { tasks } = storeToRefs(store);
-const { toggleTask, removeTask, addTask, setTasks } = store;
+const { toggleTask, removeTask, addTask, setTasks, changeTaskText } = store;
 const showCompleted = ref(false);
 const showActions = ref(false);
 
@@ -32,14 +34,6 @@ const displayedTasks = computed(() => {
 });
 const toggleCompleted = () => showCompleted.value = !showCompleted.value;
 const toggleActions = () => showActions.value = !showActions.value;
-
-function handleUpdate(payload: any) {
-  console.log(payload)
-}
-
-async function handleAdd(payload: any) {
-  await addTask(payload)
-}
 
 onMounted(async () => {
   const { tasks: newTasks } = await fetchTasks();
