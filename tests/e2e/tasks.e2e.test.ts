@@ -72,4 +72,15 @@ test.describe('Home', () => {
     await expect(editButton).toHaveCount(1);
     await expect(editButton).toBeVisible();
   })
+
+  test('should have delete button', async ({ page }) => {
+    const editButton = await page.getByText(/edit/i)
+    await editButton.click()
+
+    const uncompleteTasks = db.tasks.filter(task => !task.isDone).map(task => task.text)
+
+    const deleteButtons = await page.getByLabel(/delete-button/i)
+    await expect(deleteButtons).toHaveCount(uncompleteTasks.length);
+    await expect(deleteButtons.first()).toBeVisible();
+  })
 })

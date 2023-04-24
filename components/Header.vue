@@ -1,16 +1,39 @@
 <template>
   <header>
     <h1>
-      <img :src="logo" alt="Logo" width="24" height="24" />
       {{ title }}
     </h1>
+    <a role="button" v-if="status === 'unauthenticated'"
+      @click="signIn('auth0')">Login</a>
+    <a v-else-if="status === 'authenticated'" @click="signOut()">Logout</a>
+    <a v-else-if="status === 'loading'">Logging in...</a>
   </header>
 </template>
 
 <script setup lang="ts">
-import logo from "~/assets/icons/check.svg"
+import { useAuth } from '#imports'
 
 const props = defineProps({
   title: String,
 });
+
+const { status, data, signIn, signOut, getSession } = useAuth()
 </script>
+
+<style scoped>
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: 1rem;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  margin: 1rem;
+}
+</style>

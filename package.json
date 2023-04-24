@@ -24,6 +24,7 @@
     "@nuxtjs/eslint-module": "^4.0.2",
     "@pinia/testing": "^0.0.16",
     "@playwright/test": "^1.32.3",
+    "@sidebase/nuxt-auth": "^0.6.0-alpha.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/vue": "^7.0.0",
     "@types/node": "^18",
@@ -47,6 +48,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.9",
+    "next-auth": "4.22.1",
     "pinia": "^2.0.35"
   }
 }

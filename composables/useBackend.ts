@@ -1,7 +1,8 @@
 import { Task } from "~/types";
 
 export async function fetchTasks() {
-  const { data } = await useMyFetch<Task[]>("/tasks");
+  const { data: authData } = useAuth()
+  const { data } = await useMyFetch<Task[]>("/tasks", { params: { userId: authData.value?.user?.email } });
 
   return {
     tasks: data.value ? data.value.map(task => {

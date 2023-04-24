@@ -1,28 +1,32 @@
 {
+  "users": [
+    {
+      "id": 1,
+      "email": "hanief@gmail.com",
+      "userId": "hanief"
+    }
+  ],
   "tasks": [
     {
       "id": 1,
       "text": "Buy Groceries",
-      "isDone": false,
-      "localId": 1
+      "isDone": true,
+      "localId": 1,
+      "userId": "hanief@gmail.com"
     },
     {
       "id": 3,
       "text": "Record a video",
       "isDone": true,
-      "localId": 3
+      "localId": 3,
+      "userId": "hanief@gmail.com"
     },
     {
       "id": 6,
       "text": "Eat a burger",
-      "isDone": true,
-      "localId": 6
-    },
-    {
-      "id": 7,
-      "text": "sada",
       "isDone": false,
-      "localId": 7
+      "localId": 6,
+      "userId": "hanief@gmail.com"
     }
   ]
 }

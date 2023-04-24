@@ -54,7 +54,7 @@ ul {
 }
 
 a {
-  margin: 1rem 1rem;
+  margin: 1rem;
   text-decoration: none;
   cursor: pointer;
 }

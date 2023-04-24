@@ -15,12 +15,16 @@ export default defineNuxtConfig({
   css: ["~/assets/styles/main.css"],
   modules: [
     "@pinia/nuxt",
-    "nuxt-vitest"
+    "nuxt-vitest",
+    '@sidebase/nuxt-auth'
   ],
   pinia: {
     autoImports: [
       'defineStore',
       ['defineStore', 'definePiniaStore'],
     ],
+  },
+  auth: {
+    isEnabled: true
   }
 });

@@ -3,4 +3,5 @@ export interface Task {
   localId?: number;
   text: string;
   isDone: boolean;
+  userId: string;
 }
