@@ -17,7 +17,7 @@ const props = defineProps({
   title: String,
 });
 
-const { status, data, signIn, signOut, getSession } = useAuth()
+const { status, signIn, signOut } = useAuth()
 </script>
 
 <style scoped>

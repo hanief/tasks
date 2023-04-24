@@ -1,39 +1,60 @@
 {
+  "users": [
+    {
+      "id": 1,
+      "email": "demo@utama.app",
+      "user_id": "demo_user"
+    }
+  ],
   "tasks": [
     {
       "id": 1,
       "text": "Buy Groceries",
-      "isDone": true
+      "isDone": false,
+      "localId": 1,
+      "user_id": "demo_user"
     },
     {
       "id": 2,
       "text": "Write a blog post",
-      "isDone": false
+      "isDone": false,
+      "localId": 2,
+      "user_id": "demo_user"
     },
     {
       "id": 3,
       "text": "Record a video",
-      "isDone": true
+      "isDone": true,
+      "localId": 3,
+      "user_id": "demo_user"
     },
     {
       "id": 4,
       "text": "Go to the gym",
-      "isDone": true
+      "isDone": true,
+      "localId": 4,
+      "user_id": "demo_user"
     },
     {
       "id": 5,
       "text": "Run a marathon",
-      "isDone": true
+      "isDone": true,
+      "localId": 5,
+      "user_id": "demo_user"
     },
     {
       "id": 6,
       "text": "Eat a burger",
-      "isDone": false
+      "isDone": false,
+      "localId": 6,
+      "user_id": "demo_user"
     },
     {
       "id": 7,
       "text": "Drink a coffee",
-      "isDone": false
+      "isDone": false,
+      "localId": 7,
+      "user_id": "demo_user"
     }
   ]
 }

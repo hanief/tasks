@@ -1,8 +1,8 @@
 import { Task } from "~/types";
 
 export async function fetchTasks() {
-  const { data: authData } = useAuth()
-  const { data } = await useMyFetch<Task[]>("/tasks", { params: { userId: authData.value?.user?.email } });
+  const { status: authStatus, data: authData } = useAuth()
+  const { data } = await useMyFetch<Task[]>("/tasks");
 
   return {
     tasks: data.value ? data.value.map(task => {
@@ -12,10 +12,17 @@ export async function fetchTasks() {
   }
 }
 
-export async function createTask(text: string): Promise<{ task: Task }> {
+export async function createTask(task: Task): Promise<{ task: Task }> {
+  const { text, isDone, localId } = task
+  const { status: authStatus, data: authData } = useAuth()
   const { data } = await useMyFetch("/tasks", {
     method: "POST",
-    body: JSON.stringify({ text, isDone: false }),
+    body: JSON.stringify({
+      text,
+      isDone,
+      localId,
+      user_id: authStatus.value === 'authenticated' ? authData.value?.user_id : 'demo_user'
+    }),
   });
 
   return {

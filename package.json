@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.9",
+    "dotenv": "^16.0.3",
     "next-auth": "4.22.1",
     "pinia": "^2.0.35"
   }

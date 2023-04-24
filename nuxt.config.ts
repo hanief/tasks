@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      secret: "y7KjrBFOgLRz7mTPvwkue2CTCrUH4TJ20g55cVyWXvw",
       backend: "http://localhost:3001",
     },
   },

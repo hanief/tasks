@@ -15,6 +15,7 @@ export const useTasksStore = defineStore("tasks", () => {
       localId: localId,
       text,
       isDone: false,
+      user_id: 'demo_user',
     }
     tasks.value.push(task)
 
@@ -23,7 +24,7 @@ export const useTasksStore = defineStore("tasks", () => {
 
   async function addTask(text: string): Promise<Task> {
     const localTask = addLocalTask(text)
-    const { task: remoteTask } = await createTask(text)
+    const { task: remoteTask } = await createTask(localTask)
 
     return updateWithRemoteTask(localTask, remoteTask)
   }
