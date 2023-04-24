@@ -2,9 +2,10 @@ import { NuxtAuthHandler } from '#auth'
 import Auth0Provider from 'next-auth/providers/auth0'
 
 export default NuxtAuthHandler({
+  secret: process.env.AUTH_SECRET,
   callbacks: {
-    session: async ({ session, token, user }) => {
-      (session as any).user_id = token.sub
+    session: async ({ session, token }) => {
+      session.user_id = token.sub
       return Promise.resolve(session)
     },
   },
