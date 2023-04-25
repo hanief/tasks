@@ -1,15 +1,15 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Tasks",
+      title: "Multitask",
       meta: [
-        { name: 'description', content: 'Write it, do it' }
+        { name: 'description', content: 'Multitask: Write and do your things' }
       ]
     }
   },
   runtimeConfig: {
     public: {
-      secret: "y7KjrBFOgLRz7mTPvwkue2CTCrUH4TJ20g55cVyWXvw",
+      secret: "y7KjrBFOgLRz7mTPvwkue2CTCrUH4TJ20g55cVyWXvw=",
       backend: "http://localhost:3001",
     },
   },
@@ -25,7 +25,5 @@ export default defineNuxtConfig({
       ['defineStore', 'definePiniaStore'],
     ],
   },
-  auth: {
-    isEnabled: true
-  }
+  auth: {}
 });
