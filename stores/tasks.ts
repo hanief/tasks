@@ -2,6 +2,7 @@ import { Task } from "~/types"
 import { createTask, deleteTask, updateTask } from "~/composables/useBackend"
 
 export const useTasksStore = defineStore("tasks", () => {
+  const { data: authData, status: authStatus } = useAuth()
   const tasks = ref<Task[]>([])
 
   function setTasks(newTasks: Task[]) {
@@ -15,7 +16,7 @@ export const useTasksStore = defineStore("tasks", () => {
       localId: localId,
       text,
       isDone: false,
-      user_id: 'demo_user',
+      user: authStatus.value === 'authenticated' ? authData.value?.user?.email as string : 'tasks@multita.sk'
     }
     tasks.value.push(task)
 

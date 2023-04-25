@@ -21,7 +21,7 @@ export async function createTask(task: Task): Promise<{ task: Task }> {
       text,
       isDone,
       localId,
-      user_id: authStatus.value === 'authenticated' ? authData.value?.user_id : 'demo_user'
+      user: authStatus.value === 'authenticated' ? authData.value?.user?.email : 'tasks@multita.sk'
     }),
   });
 

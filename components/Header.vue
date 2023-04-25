@@ -4,7 +4,7 @@
       {{ title }}
     </h1>
     <a role="button" v-if="status === 'unauthenticated'"
-      @click="signIn('auth0')">Login</a>
+      @click="signIn('google')">Login</a>
     <a v-else-if="status === 'authenticated'" @click="signOut()">Logout</a>
     <a v-else-if="status === 'loading'">Logging in...</a>
   </header>

@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import db from '~/mocks/test.json'
+import db from '~/mocks/template.json'
 const baseURL = 'http://localhost:3001'
 
 export const handlers = [
