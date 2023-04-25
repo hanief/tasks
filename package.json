@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "mock": "node mocks/json-server.js",
+    "mock": "node mocks/index.js",
     "test": "yarn test:once && yarn test:e2e",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
@@ -16,7 +16,8 @@
     "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check .",
     "lint": "yarn lint:js && yarn lint:prettier",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
+    "setup": "./setup.sh"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.4.2",
