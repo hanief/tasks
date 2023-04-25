@@ -1,5 +1,5 @@
 <template>
-  <Header title="Tasks"></Header>
+  <Header></Header>
   <main>
     <section>
       <TaskList />

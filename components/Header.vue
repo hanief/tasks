@@ -1,24 +1,8 @@
 <template>
   <header>
-    <h1>
-      {{ title }}
-    </h1>
-    <a role="button" v-if="status === 'unauthenticated'"
-      @click="signIn('google')">Login</a>
-    <a v-else-if="status === 'authenticated'" @click="signOut()">Logout</a>
-    <a v-else-if="status === 'loading'">Logging in...</a>
+    <h1>Multitask</h1>
   </header>
 </template>
-
-<script setup lang="ts">
-import { useAuth } from '#imports'
-
-const props = defineProps({
-  title: String,
-});
-
-const { status, signIn, signOut } = useAuth()
-</script>
 
 <style scoped>
 header {
