@@ -1,9 +1,10 @@
 export default defineNuxtConfig({
+  ssr: false,
   app: {
     head: {
-      title: "Multitask",
+      title: "Multitask | Write and do your things",
       meta: [
-        { name: 'description', content: 'Multitask: Write and do your things' }
+        { name: 'description', content: 'Multitask | Write and do your things' }
       ]
     }
   },
@@ -17,7 +18,8 @@ export default defineNuxtConfig({
   modules: [
     "@pinia/nuxt",
     "nuxt-vitest",
-    '@sidebase/nuxt-auth'
+    '@sidebase/nuxt-auth',
+    '@vueuse/nuxt',
   ],
   pinia: {
     autoImports: [

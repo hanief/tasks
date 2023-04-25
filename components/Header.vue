@@ -1,8 +1,8 @@
 <template>
   <header>
-    <a class="logo">
+    <NuxtLink to="/">
       <h1>Multitask</h1>
-    </a>
+    </NuxtLink>
   </header>
 </template>
 

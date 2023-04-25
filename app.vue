@@ -1,8 +1,9 @@
 <template>
-  <Header></Header>
-  <main>
-    <section>
-      <TaskList />
-    </section>
-  </main>
+  <NuxtLayout>
+    <main>
+      <section>
+        <NuxtPage />
+      </section>
+    </main>
+  </NuxtLayout>
 </template>
