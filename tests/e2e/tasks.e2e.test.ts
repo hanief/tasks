@@ -1,25 +1,14 @@
 import { test, expect } from '@playwright/test';
-import db from '~/mocks/test.json'
+import db from '~/utils/msw/test.json'
 
 test.describe('Home', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('**/tasks?**', route => {
-      if (route.request().method() === 'GET') {
-        route.fulfill({ json: db.tasks })
-      } else if (route.request().method() === 'POST') {
-        const task = JSON.parse(route.request().postData() as string)
-        const json = { ...task, id: db.tasks.length + 1 }
-        route.fulfill({ json })
-      } else {
-        route.continue();
-      }
-    })
     await page.goto('/');
   });
 
   test('should have header', async ({ page }) => {
     await expect(page.getByRole('heading')).toBeVisible();
-    await expect(page.getByRole('heading')).toContainText(/tasks/i);
+    await expect(page.getByRole('heading')).toContainText(/multitask/i);
   });
 
   // test('should have list of uncomplete tasks', async ({ page }) => {
