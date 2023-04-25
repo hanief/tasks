@@ -7,7 +7,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "mock": "node mocks/index.js",
+    "mock": "cd mocks && node index.js",
     "test": "yarn test:once && yarn test:e2e",
     "test:unit": "vitest",
     "test:e2e": "playwright test",

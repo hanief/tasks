@@ -1,6 +1,8 @@
 <template>
   <header>
-    <h1>Multitask</h1>
+    <a class="logo">
+      <h1>Multitask</h1>
+    </a>
   </header>
 </template>
 
@@ -11,13 +13,10 @@ header {
   align-items: center;
 }
 
-h1 {
-  margin: 1rem;
-}
-
 a {
+  color: var(--color-text);
   text-decoration: none;
   cursor: pointer;
-  margin: 1rem;
+  margin: 0 1rem;
 }
 </style>

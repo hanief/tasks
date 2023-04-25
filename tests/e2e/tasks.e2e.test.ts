@@ -3,6 +3,12 @@ import db from '~/utils/msw/test.json'
 
 test.describe('Home', () => {
   test.beforeEach(async ({ page }) => {
+    await page.route('http://localhost:3001/tasks', route => {
+      route.fulfill({
+        status: 200,
+        json: db.tasks
+      })
+    })
     await page.goto('/');
   });
 
