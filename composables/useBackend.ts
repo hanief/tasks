@@ -1,4 +1,5 @@
 import { Task } from "~/types";
+import { useStorage } from '@vueuse/core'
 
 export async function fetchTasks() {
   const { status: authStatus, data: authData } = useAuth()
@@ -15,13 +16,15 @@ export async function fetchTasks() {
 export async function createTask(task: Task): Promise<{ task: Task }> {
   const { text, isDone, localId } = task
   const { status: authStatus, data: authData } = useAuth()
+  const user = useStorage('user', crypto.randomUUID())
+
   const { data } = await useMyFetch("/tasks", {
     method: "POST",
     body: JSON.stringify({
       text,
       isDone,
       localId,
-      user: authStatus.value === 'authenticated' ? authData.value?.user?.email : 'tasks@multita.sk'
+      user: user.value || 'tasks@multita.sk'
     }),
   });
 
