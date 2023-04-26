@@ -36,7 +36,7 @@ const inputRef = ref();
 const taskText = ref(task.text);
 
 function handleToggle() {
-  emit("toggle", { ...task, isDone: !task.isDone });
+  emit("toggle", task);
 }
 
 function handleRemove() {

@@ -61,8 +61,9 @@ export const useTasksStore = defineStore("tasks", () => {
   }
 
   async function toggleTask(task: Task) {
-    updateLocalTask(task)
-    await updateTask(task)
+    const updatedTask = { ...task, isDone: !task.isDone }
+    updateLocalTask(updatedTask)
+    await updateTask(updatedTask)
   }
 
   async function changeTaskText(task: Task) {

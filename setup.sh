@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install main dependencies
-npm install
+yarn install
 
 # Copy .env.example to .env
 cp .env.example .env

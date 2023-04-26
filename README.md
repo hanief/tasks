@@ -4,12 +4,14 @@ This is a simple tasks CRUD app.
 
 ## Setup
 
-1. Run the setup script:
+1. Install [Yarn](https://yarnpkg.com/getting-started/install)
+
+2. Run the setup script:
 
 ```bash
 ./setup.sh
 ```
-2. Set the correct .env values in root and mocks/ directory
+3. Set the correct .env values in root and mocks/ directory
 
 ## Development
 
