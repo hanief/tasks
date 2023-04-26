@@ -1,6 +1,6 @@
 export interface Task {
   id?: number;
-  localId?: number | null;
+  localId?: number;
   text: string;
   isDone: boolean;
   user: string;

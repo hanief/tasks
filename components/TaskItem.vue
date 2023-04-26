@@ -10,8 +10,7 @@
         :src="task.isDone ? checkIcon : circleIcon" alt="toggle complete"
         width="18" height="18" />
     </button>
-    <button aria-label="delete-button" v-show="showActions"
-      @click="emit('remove', task)">
+    <button aria-label="delete-button" v-show="showActions" @click="handleRemove">
       <img class="danger" :src="trashIcon" alt="delete button" width="18"
         height="18" />
     </button>
@@ -38,6 +37,10 @@ const taskText = ref(task.text);
 
 function handleToggle() {
   emit("toggle", { ...task, isDone: !task.isDone });
+}
+
+function handleRemove() {
+  emit("remove", task);
 }
 
 function handleFocus() {

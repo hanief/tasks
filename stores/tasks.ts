@@ -8,21 +8,20 @@ export const useTasksStore = defineStore("tasks", () => {
   const storageTasks = useStorage<Task[]>("tasks", [])
   const tasks = ref<Task[]>(storageTasks.value)
 
-  function mergeTasks(tasks: Task[], newTasks: Task[]) {
-    const mergedTasks = tasks.map(task => {
-      const newTask = newTasks.find(newTask => newTask.localId !== null && newTask.localId === task.localId)
-      if (newTask) {
-        return newTask
-      }
+  function syncTasks(oldTasks: Task[], newTasks: Task[]) {
+    const syncedTasks = newTasks
+    const newTasksLocalId = newTasks.map(newTask => newTask.localId)
+    const newTasksText = newTasks.map(newTask => newTask.text)
+    const oldTasksNotInNewTasks = oldTasks.filter(oldTask => !newTasksLocalId.includes(oldTask.localId) && !newTasksText.includes(oldTask.text))
+    syncedTasks.push(...oldTasksNotInNewTasks)
 
-      return task
-    })
+    Promise.all(oldTasksNotInNewTasks.map(oldTask => createTask(oldTask)))
 
-    return mergedTasks
+    return syncedTasks
   }
 
   function setTasks(newTasks: Task[]) {
-    tasks.value = mergeTasks(tasks.value, newTasks)
+    tasks.value = syncTasks(tasks.value, newTasks)
     storageTasks.value = tasks.value
   }
 
@@ -53,7 +52,7 @@ export const useTasksStore = defineStore("tasks", () => {
   function updateWithRemoteTaskId(localTask: Task, remoteTask: Task) {
     tasks.value = tasks.value.map(task => {
       if (task.localId === localTask.localId) {
-        return { ...task, id: remoteTask.id, localId: null }
+        return { ...task, id: remoteTask.id }
       }
 
       return task
