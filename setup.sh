@@ -11,7 +11,7 @@ git submodule update --init --recursive
 
 # Install submodule dependencies
 cd mocks
-npm install
+yarn install
 
 # Copy .env.example to .env
 cp .env.example .env
