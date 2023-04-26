@@ -75,9 +75,9 @@ export const useTasksStore = defineStore("tasks", () => {
     storageTasks.value = tasks.value
   }
 
-  async function removeTask(task: Task) {
+  function removeTask(task: Task) {
     removeLocalTask(task)
-    await deleteTask(task)
+    deleteTask(task)
   }
 
   function removeLocalTask(task: Task) {

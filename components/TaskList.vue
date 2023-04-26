@@ -1,10 +1,9 @@
 <template>
   <ul>
     <TransitionGroup name="list">
-      <TaskItem
-        v-for="task in tasks.filter(t => showCompleted || !t.isDone).sort((a, b) => Number(a.isDone) - Number(b.isDone))"
-        :task="task" :key="task.localId" :showActions="showActions"
-        @remove="removeTask" @toggle="toggleTask" @update="changeTaskText">
+      <TaskItem v-for="task in displayedTasks" :task="task" :key="task.localId"
+        :showActions="showActions" @remove="removeTask" @toggle="toggleTask"
+        @update="changeTaskText">
       </TaskItem>
     </TransitionGroup>
     <TaskItemNew @add="addTask" />
@@ -30,6 +29,7 @@ const showActions = ref(false);
 
 const toggleCompleted = () => showCompleted.value = !showCompleted.value;
 const toggleActions = () => showActions.value = !showActions.value;
+const displayedTasks = computed(() => tasks.value.filter(t => showCompleted.value || !t.isDone).sort((a, b) => Number(a.isDone) - Number(b.isDone)));
 
 onMounted(async () => {
   const { tasks: newTasks } = await fetchTasks();
