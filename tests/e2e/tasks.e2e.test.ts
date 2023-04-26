@@ -1,116 +1,190 @@
-import { test, expect } from '@playwright/test';
-import db from '~/utils/msw/test.json'
+import { test, expect } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 test.describe('Home', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('http://localhost:3001/tasks', route => {
+    await page.route('**/tasks', route => {
       route.fulfill({
-        status: 200,
-        json: db.tasks
+        json: []
       })
     })
-    await page.goto('/');
-  });
+
+    await page.addInitScript(() => {
+      window.localStorage.removeItem('user')
+      window.localStorage.removeItem('tasks')
+    });
+
+    await page.goto('/')
+  })
+
+  async function addNewTask(page: Page, text: string = 'New task', isDone: boolean = false) {
+    const addNewInput = await page.getByPlaceholder(/add new task/i)
+    await expect(addNewInput).toHaveValue('')
+    await addNewInput.fill(text)
+    await addNewInput.press('Enter')
+
+    if (isDone) {
+      const listItem = await page
+        .getByRole('listitem', { name: 'task-item' })
+        .last()
+      const toggleButton = listItem.getByRole('button', { name: 'toggle-button' })
+      await expect(toggleButton).toBeVisible()
+      await toggleButton.click()
+    }
+
+    await page.waitForLoadState('networkidle')
+  }
 
   test('should have header', async ({ page }) => {
-    await expect(page.getByRole('heading')).toBeVisible();
-    await expect(page.getByRole('heading')).toContainText(/multitask/i);
-  });
+    await expect(page.getByRole('heading')).toBeVisible()
+    await expect(page.getByRole('heading')).toContainText(/multitask/i)
+  })
 
-  // test('should have list of uncomplete tasks', async ({ page }) => {
-  //   const uncompleteTasks = db.tasks.filter(task => !task.isDone)
-  //   const inputList = page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   await expect(inputList).toHaveCount(uncompleteTasks.length);
-
-  //   const texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
-  //   await expect(texts).toEqual(uncompleteTasks.map(task => task.text));
-
-  //   const toggleCompleteButtonList = page.getByRole('listitem').getByRole('button')
-  //   await expect(toggleCompleteButtonList).toHaveCount(uncompleteTasks.length);
-  // })
-
-  test('should have add new task input', async ({ page }) => {
+  test('should be able to add new task', async ({ page }) => {
     const addNewInput = page.getByPlaceholder(/add new task/i)
-    await expect(addNewInput).toHaveCount(1);
-    await expect(addNewInput).toBeVisible();
+    await expect(addNewInput).toHaveCount(1)
+    await expect(addNewInput).toBeVisible()
+
+    let inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(0)
+
+    await addNewTask(page)
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(1)
+    await expect(page.getByPlaceholder(/add new task/i)).toHaveValue('')
+
+    await addNewTask(page)
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(2)
+    await expect(page.getByPlaceholder(/add new task/i)).toHaveValue('')
   })
 
-  // test('should be able to add new task', async ({ page }) => {
-  //   const uncompleteTasks = db.tasks.filter(task => !task.isDone).map(task => task.text)
-  //   const inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   await expect(inputList).toHaveCount(uncompleteTasks.length);
+  test('should be able to see list of tasks', async ({ page }) => {
+    await addNewTask(page, 'Task 1')
+    await addNewTask(page, 'Task 2')
+    await addNewTask(page, 'Task 3', true)
 
-  //   const addNewInput = await page.getByPlaceholder(/add new task/i)
-  //   await addNewInput.fill('New task')
+    const inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(2)
 
-  //   const secondInputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   await expect(secondInputList).toHaveCount(uncompleteTasks.length);
+    const texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
+    await expect(texts).toEqual(['Task 1', 'Task 2'])
 
-  //   await addNewInput.press('Enter')
-  //   await page.waitForLoadState('networkidle')
-  //   const thirdInputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   const newUncompleteTasks = [...uncompleteTasks, 'New task']
-  //   await expect(thirdInputList).toHaveCount(newUncompleteTasks.length);
-
-  //   const texts = await thirdInputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
-  //   await expect(texts).toEqual(newUncompleteTasks);
-  // })
-
-  test('should have show completed button', async ({ page }) => {
-    const showCompletedButton = page.getByText(/show completed/i)
-    await expect(showCompletedButton).toHaveCount(1);
-    await expect(showCompletedButton).toBeVisible();
+    const toggleCompleteButtonList = await page.getByRole('listitem').getByRole('button')
+    await expect(toggleCompleteButtonList).toHaveCount(2)
   })
 
-  test('should have edit button', async ({ page }) => {
-    const editButton = page.getByText(/edit/i)
-    await expect(editButton).toHaveCount(1);
-    await expect(editButton).toBeVisible();
+  test('should be able to toggle complete, show and hide completed tasks', async ({ page }) => {
+    await addNewTask(page, 'Task 1')
+    await addNewTask(page, 'Task 2')
+    await addNewTask(page, 'Task 3', true)
+
+    let inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(2)
+
+    let toggleCompletedButtons = await page.getByRole('button', { name: /toggle-button/i })
+    await toggleCompletedButtons.first().click()
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(1)
+
+    let showCompletedButton = page.getByText(/show completed/i)
+    await expect(showCompletedButton).toBeVisible()
+    await showCompletedButton.click()
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(3)
+
+    const hideCompletedButton = page.getByText(/hide completed/i)
+    await expect(hideCompletedButton).toBeVisible()
+    await hideCompletedButton.click()
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(1)
+
+    showCompletedButton = page.getByText(/show completed/i)
+    await expect(showCompletedButton).toBeVisible()
   })
 
-  // test('should have delete button', async ({ page }) => {
-  //   const editButton = await page.getByText(/edit/i)
-  //   await editButton.click()
+  test('should be able to delete task', async ({ page }) => {
+    await addNewTask(page, 'Task 1')
+    await addNewTask(page, 'Task 2')
+    await addNewTask(page, 'Task 3', true)
+    await addNewTask(page, 'Task 4', true)
 
-  //   const uncompleteTasks = db.tasks.filter(task => !task.isDone).map(task => task.text)
+    const editButton = await page.getByText(/edit/i)
+    await expect(editButton).toHaveCount(1)
+    await expect(editButton).toBeVisible()
+    await editButton.click()
 
-  //   const deleteButtons = await page.getByLabel(/delete-button/i)
-  //   await expect(deleteButtons).toHaveCount(uncompleteTasks.length);
-  //   await expect(deleteButtons.first()).toBeVisible();
-  // })
+    const doneButton = await page.getByText(/done/i)
+    await expect(doneButton).toHaveCount(1)
+    await expect(doneButton).toBeVisible()
 
-  // test('should be able to delete task', async ({ page }) => {
-  //   const editButton = await page.getByText(/edit/i)
-  //   await editButton.click()
+    let deleteButtons = await page.getByRole('button', { name: /delete-button/i })
+    await expect(deleteButtons).toHaveCount(2)
 
-  //   const uncompleteTasks = db.tasks.filter(task => !task.isDone).map(task => task.text)
+    await deleteButtons.last().click()
 
-  //   const deleteButtons = await page.getByLabel(/delete-button/i)
-  //   await expect(deleteButtons).toHaveCount(uncompleteTasks.length);
+    deleteButtons = await page.getByRole('button', { name: /delete-button/i })
+    await expect(deleteButtons).toHaveCount(1)
 
-  //   await deleteButtons.first().click()
+    let showCompletedButton = page.getByText(/show completed/i)
+    await showCompletedButton.click()
+    deleteButtons = await page.getByRole('button', { name: /delete-button/i })
+    await expect(deleteButtons).toHaveCount(3)
 
-  //   const secondDeleteButtons = await page.getByLabel(/delete-button/i)
-  //   await expect(secondDeleteButtons).toHaveCount(uncompleteTasks.length - 1);
-  // })
+    await deleteButtons.last().click()
 
-  // test('should be able to update task', async ({ page }) => {
-  //   const uncompleteTasks = db.tasks.filter(task => !task.isDone).map(task => task.text)
+    deleteButtons = await page.getByRole('button', { name: /delete-button/i })
+    await expect(deleteButtons).toHaveCount(2)
 
-  //   const inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   await expect(inputList).toHaveCount(uncompleteTasks.length);
+    doneButton.click()
+    deleteButtons = await page.getByRole('button', { name: /delete-button/i })
+    await expect(deleteButtons).toHaveCount(0)
+  })
 
-  //   const texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
-  //   await expect(texts).toEqual(uncompleteTasks);
+  test('should be able to update task', async ({ page }) => {
+    await addNewTask(page, 'Task 1')
+    await addNewTask(page, 'Task 2')
+    await addNewTask(page, 'Task 3', true)
+    await addNewTask(page, 'Task 4', true)
 
-  //   await inputList.first().fill('Updated task')
+    let inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(2)
 
-  //   const secondInputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
-  //   const newUncompleteTasks = [...uncompleteTasks]
-  //   newUncompleteTasks[0] = 'Updated task'
-  //   await expect(secondInputList).toHaveCount(newUncompleteTasks.length);
+    let texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
+    await expect(texts).toEqual(['Task 1', 'Task 2'])
 
-  //   const secondTexts = await secondInputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
-  //   await expect(secondTexts).toEqual(newUncompleteTasks);
-  // })
+    const firstInput = await inputList.first()
+    await firstInput.fill('Updated Task 1')
+    await firstInput.press('Enter')
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(2)
+
+    texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
+    await expect(texts).toEqual(['Updated Task 1', 'Task 2'])
+
+    let showCompletedButton = page.getByText(/show completed/i)
+    await showCompletedButton.click()
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(4)
+
+    texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
+    await expect(texts).toEqual(['Updated Task 1', 'Task 2', 'Task 3', 'Task 4'])
+
+    const lastInput = await inputList.last()
+    await lastInput.fill('Updated Task 4')
+    await lastInput.press('Enter')
+
+    inputList = await page.getByRole('listitem').getByLabel(/task-item-input/i)
+    await expect(inputList).toHaveCount(4)
+
+    texts = await inputList.evaluateAll<string[], HTMLInputElement>(rows => rows.map(item => item.value))
+    await expect(texts).toEqual(['Updated Task 1', 'Task 2', 'Task 3', 'Updated Task 4'])
+  })
 })

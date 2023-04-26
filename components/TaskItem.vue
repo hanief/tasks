@@ -1,15 +1,20 @@
 <template>
-  <li :class="{ editing: isEditing }">
-    <input ref="inputRef" aria-label="task-item-input" :value="taskText"
-      @change="handleChange" @focus="handleFocus" @blur="handleBlur"
-      @keydown.enter.prevent="" @keyup.enter="handleEnterPress" />
-    <img role="button" aria-label="toggle-button"
-      :class="{ success: task.isDone }" key="toggle" v-show="!showActions"
-      :src="task.isDone ? checkIcon : circleIcon" alt="toggle complete" width="18"
-      height="18" @click="emit('toggle', task)" />
-    <img role="button" aria-label="delete-button" class="danger"
-      v-show="showActions" key="delete" :src="trashIcon" alt="delete button"
-      width="18" height="18" @click="emit('remove', task)" />
+  <li aria-label="task-item" :class="{ editing: isEditing }">
+    <input ref="inputRef" id="task-item-input" aria-label="task-item-input"
+      :value="taskText" @change="handleChange" @focus="handleFocus"
+      @blur="handleBlur" @keydown.enter.prevent=""
+      @keyup.enter="handleEnterPress" />
+    <button aria-label="toggle-button" v-show="!showActions"
+      @click="handleToggle">
+      <img :class="{ success: task.isDone }"
+        :src="task.isDone ? checkIcon : circleIcon" alt="toggle complete"
+        width="18" height="18" />
+    </button>
+    <button aria-label="delete-button" v-show="showActions"
+      @click="emit('remove', task)">
+      <img class="danger" :src="trashIcon" alt="delete button" width="18"
+        height="18" />
+    </button>
   </li>
 </template>
 
@@ -30,6 +35,10 @@ const emit = defineEmits<{
 const isEditing = ref(false);
 const inputRef = ref();
 const taskText = ref(task.text);
+
+function handleToggle() {
+  emit("toggle", { ...task, isDone: !task.isDone });
+}
 
 function handleFocus() {
   isEditing.value = true;
@@ -90,6 +99,18 @@ li>input:focus {
 li>a {
   text-decoration: none;
   cursor: pointer;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  ;
 }
 
 img.success {

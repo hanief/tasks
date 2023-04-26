@@ -26,10 +26,10 @@ export async function createTask(task: Task): Promise<{ task: Task }> {
       localId,
       user: user.value || 'tasks@multita.sk'
     }),
-  });
+  })
 
   return {
-    task: data.value as Task,
+    task: data.value as Task
   }
 }
 

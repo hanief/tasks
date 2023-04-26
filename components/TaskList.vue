@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useTasksStore } from "~/stores/tasks";
+import type { Task } from "~/types";
 
 const store = useTasksStore();
 const { tasks } = storeToRefs(store);
@@ -37,7 +38,9 @@ const toggleActions = () => showActions.value = !showActions.value;
 
 onMounted(async () => {
   const { tasks: newTasks } = await fetchTasks();
-  setTasks(newTasks)
+  if (newTasks.length > 0) {
+    setTasks(newTasks)
+  }
 });
 </script>
 

@@ -5,11 +5,25 @@ import { useStorage } from '@vueuse/core'
 export const useTasksStore = defineStore("tasks", () => {
   const { data: authData, status: authStatus } = useAuth()
   const user = useStorage('user', crypto.randomUUID())
+  const storageTasks = useStorage<Task[]>("tasks", [])
+  const tasks = ref<Task[]>(storageTasks.value)
 
-  const tasks = ref<Task[]>([])
+  function mergeTasks(tasks: Task[], newTasks: Task[]) {
+    const mergedTasks = tasks.map(task => {
+      const newTask = newTasks.find(newTask => newTask.localId !== null && newTask.localId === task.localId)
+      if (newTask) {
+        return newTask
+      }
+
+      return task
+    })
+
+    return mergedTasks
+  }
 
   function setTasks(newTasks: Task[]) {
-    tasks.value = newTasks
+    tasks.value = mergeTasks(tasks.value, newTasks)
+    storageTasks.value = tasks.value
   }
 
   function addLocalTask(text: string): Task {
@@ -22,42 +36,44 @@ export const useTasksStore = defineStore("tasks", () => {
       user: user.value || 'tasks@multita.sk'
     }
     tasks.value.push(task)
+    storageTasks.value = tasks.value
 
     return task
   }
 
-  async function addTask(text: string): Promise<Task> {
+  async function addTask(text: string) {
     const localTask = addLocalTask(text)
     const { task: remoteTask } = await createTask(localTask)
 
-    return updateWithRemoteTask(localTask, remoteTask)
+    if (remoteTask !== null && remoteTask !== undefined) {
+      updateWithRemoteTaskId(localTask, remoteTask)
+    }
   }
 
-  function updateWithRemoteTask(localTask: Task, remoteTask: Task): Task {
+  function updateWithRemoteTaskId(localTask: Task, remoteTask: Task) {
     tasks.value = tasks.value.map(task => {
       if (task.localId === localTask.localId) {
-        return { ...remoteTask, localId: task.localId }
+        return { ...task, id: remoteTask.id, localId: null }
       }
 
       return task
     })
-
-    return remoteTask
+    storageTasks.value = tasks.value
   }
 
-  function toggleTask(task: Task) {
-    task.isDone = !task.isDone
+  async function toggleTask(task: Task) {
     updateLocalTask(task)
-    updateTask(task)
+    await updateTask(task)
   }
 
-  function changeTaskText(task: Task) {
+  async function changeTaskText(task: Task) {
     updateLocalTask(task)
-    updateTask(task)
+    await updateTask(task)
   }
 
   function updateLocalTask(task: Task) {
-    tasks.value = tasks.value.map(t => t.id === task.id ? task : t)
+    tasks.value = tasks.value.map(oldTask => oldTask.id === task.id ? task : oldTask)
+    storageTasks.value = tasks.value
   }
 
   async function removeTask(task: Task) {
@@ -67,7 +83,8 @@ export const useTasksStore = defineStore("tasks", () => {
 
   function removeLocalTask(task: Task) {
     tasks.value = tasks.value.filter(t => t.localId !== task.localId)
+    storageTasks.value = tasks.value
   }
 
-  return { tasks, setTasks, addTask, updateWithRemoteTask, removeTask, toggleTask, changeTaskText }
+  return { tasks, setTasks, addTask, updateWithRemoteTaskId, removeTask, toggleTask, changeTaskText }
 })
