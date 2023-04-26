@@ -25,6 +25,20 @@ export const useTasksStore = defineStore("tasks", () => {
     storageTasks.value = tasks.value
   }
 
+  async function addTask(text: string) {
+    const localTask = addLocalTask(text)
+    const { task: remoteTask } = await createTask(localTask)
+
+    tasks.value = tasks.value.map(task => {
+      if (task.localId === remoteTask.localId) {
+        task.id = remoteTask.id
+      }
+
+      return task
+    })
+    storageTasks.value = tasks.value
+  }
+
   function addLocalTask(text: string): Task {
     const localId = generateRandomInteger()
     const task: Task = {
@@ -40,39 +54,24 @@ export const useTasksStore = defineStore("tasks", () => {
     return task
   }
 
-  async function addTask(text: string) {
-    const localTask = addLocalTask(text)
-    const { task: remoteTask } = await createTask(localTask)
-
-    if (remoteTask !== null && remoteTask !== undefined) {
-      updateWithRemoteTaskId(localTask, remoteTask)
-    }
-  }
-
-  function updateWithRemoteTaskId(localTask: Task, remoteTask: Task) {
-    tasks.value = tasks.value.map(task => {
-      if (task.localId === localTask.localId) {
-        return { ...task, id: remoteTask.id }
-      }
-
-      return task
-    })
-    storageTasks.value = tasks.value
-  }
-
-  async function toggleTask(task: Task) {
-    const updatedTask = { ...task, isDone: !task.isDone }
-    updateLocalTask(updatedTask)
-    await updateTask(updatedTask)
-  }
-
-  async function changeTaskText(task: Task) {
+  function toggleTask(task: Task) {
     updateLocalTask(task)
-    await updateTask(task)
+    updateTask(task)
+  }
+
+  function changeTaskText(task: Task) {
+    updateLocalTask(task)
+    updateTask(task)
   }
 
   function updateLocalTask(task: Task) {
-    tasks.value = tasks.value.map(oldTask => oldTask.id === task.id ? task : oldTask)
+    tasks.value = tasks.value.map(t => {
+      if (t.localId === task.localId) {
+        return task
+      }
+
+      return t
+    })
     storageTasks.value = tasks.value
   }
 
@@ -86,5 +85,5 @@ export const useTasksStore = defineStore("tasks", () => {
     storageTasks.value = tasks.value
   }
 
-  return { tasks, setTasks, addTask, updateWithRemoteTaskId, removeTask, toggleTask, changeTaskText }
+  return { tasks, setTasks, addTask, removeTask, toggleTask, changeTaskText }
 })

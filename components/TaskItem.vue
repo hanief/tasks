@@ -22,6 +22,10 @@ import { Task } from "~/types"
 import checkIcon from '~/assets/icons/check.svg'
 import circleIcon from '~/assets/icons/circle.svg'
 import trashIcon from '~/assets/icons/trash.svg'
+import { useTasksStore } from "~/stores/tasks";
+
+const store = useTasksStore();
+const { toggleTask, removeTask, changeTaskText } = store;
 const { task } = defineProps<{
   showActions: boolean;
   task: Task;
@@ -36,7 +40,7 @@ const inputRef = ref();
 const taskText = ref(task.text);
 
 function handleToggle() {
-  emit("toggle", task);
+  toggleTask({ ...task, isDone: !task.isDone });
 }
 
 function handleRemove() {
